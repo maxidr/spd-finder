@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    cuba (3.1.0)
+      rack
+    cutest (1.2.0)
+    rack (1.5.0)
+    shotgun (0.9)
+      rack (>= 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cuba (= 3.1.0)
+  cutest (= 1.2.0)
+  shotgun
