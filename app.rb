@@ -10,6 +10,8 @@ Cuba.use Rack::Static,
     root: 'public',
     urls: ['/js', '/css', '/img']
 
+Dir["./models/**/*.rb"].each  { |rb| require rb }
+
 Cuba.define do
   on root do 
     res.write 'hello'
