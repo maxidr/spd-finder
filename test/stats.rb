@@ -23,7 +23,7 @@ scope do
   end
 
   test 'add project to axis' do |stats|
-    stats.add_proyect_to_axis(1, 10)
+    stats.add_project_to_axis(1, 10)
     assert stats.is_project_in_axis? 1, 10
   end
 end

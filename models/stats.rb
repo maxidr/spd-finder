@@ -32,7 +32,7 @@ class Stats
     @redis.get project_key(id)
   end
 
-  def add_proyect_to_axis(project_id, axis_id)
+  def add_project_to_axis(project_id, axis_id)
     @redis.setbit(axis_key(axis_id), project_id, 1)
   end
 
