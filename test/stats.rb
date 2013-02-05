@@ -13,13 +13,15 @@ scope do
   end
 
   test 'add a new project' do |stats|
-    stats.add_project(1, 'project_1')
-    assert @redis.get('projects:1') == 'project_1'
+    info = { name: 'project_1' }
+    stats.add_project(1, info)
+    assert_equal info.to_json, @redis.get('projects:1')
   end
 
   test 'find project by id' do |stats|
-    stats.add_project(11, 'project_11')
-    assert stats.find_project(11) == 'project_11'
+    info = { name: 'project_11' }
+    stats.add_project(11, info)
+    assert_equal info, stats.find_project(11)
     assert !@stats.find_project(99)
   end
 

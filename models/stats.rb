@@ -1,5 +1,7 @@
 # enconding: UTF-8
-#
+
+require 'json'
+
 # This class interact with redis to persist the stats
 # of any project and they relation with the 3 axis (functionality, 
 # technology and activity).
@@ -22,14 +24,19 @@ class Stats
   end
 
   # Add a new project to the stats
-  def add_project(id, text_identifier)
-    @redis.set project_key(id), text_identifier
+  # @param id [Fixnum or String] the id of the project
+  # @param info [Hash] the values to persist
+  def add_project(id, info)
+    @redis.set project_key(id), info.to_json
   end
 
   # find project and return the text identifier
   # or false if not exists
+  #
+  # @return [Hash] with the project information
   def find_project(id)
-    @redis.get project_key(id)
+    info = @redis.get project_key(id)
+    JSON.parse(info, symbolize_names: true) if info
   end
 
   # Asociate project (id) with an axis (id)
