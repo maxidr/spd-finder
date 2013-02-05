@@ -3,12 +3,17 @@
 require File.expand_path("../app", File.dirname(__FILE__))
 #require "cuba/test"
 require 'redis'
+require 'rr'
+require 'sequel'
 
 #prepare do
 #  Capybara.reset!
 #  Ohm.flush
 #end
 #
+class Cutest::Scope
+  include RR::Adapters::RRMethods
+end
 #class Cutest::Scope
 #  def session
 #    Capybara.current_session.driver.request.env["rack.session"]

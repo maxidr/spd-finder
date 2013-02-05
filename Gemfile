@@ -6,3 +6,7 @@ gem 'cutest', '1.2.0'
 gem 'rake'
 gem 'shotgun'
 gem 'redis', '3.0.2'
+
+gem 'sequel'
+
+gem 'rr', '1.0.4'

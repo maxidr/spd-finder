@@ -7,6 +7,8 @@ GEM
     rack (1.5.0)
     rake (10.0.3)
     redis (3.0.2)
+    rr (1.0.4)
+    sequel (3.43.0)
     shotgun (0.9)
       rack (>= 1.0)
 
@@ -18,4 +20,6 @@ DEPENDENCIES
   cutest (= 1.2.0)
   rake
   redis (= 3.0.2)
+  rr (= 1.0.4)
+  sequel
   shotgun
