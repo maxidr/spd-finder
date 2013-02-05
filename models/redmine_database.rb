@@ -60,13 +60,17 @@ class RedmineDatabase
   #
   # @return [Array<Hash>]
   #
-  def all_axis(custom_field_id, &block)
-    yaml_values = @db.select(:possible_values).from(:custom_fields).where(id: custom_field_id).first
-    values = YAML.load(yaml_values)
-    values.map do |desc|
-      axis = parse_axis_description(desc)
-      block ? block.call(axis) : axis
+  def all_axis(*custom_field_ids, &block)
+    all_axis = []
+    all_values = @db.select(:possible_values).from(:custom_fields).where("id IN ?", custom_field_ids).all
+    all_values.each do |row|
+      values = YAML.load(row[:possible_values])
+      values.map do |desc|
+        axis = parse_axis_description(desc)
+        block ? block.call(axis) : all_axis << axis
+      end
     end
+    all_axis
   end
 
   # Return the relations between projects and axis. 

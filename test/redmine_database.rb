@@ -12,11 +12,13 @@ scope do
           { id:2, name: 'test 2', identifier: 'test_2' },
         ]
       end
-      stub(db).select.stub!.from.stub!.where.stub!.first do
-        [
-          '010 GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros',
-          '011 GestiÃ³n de la informaciÃ³n | GestiÃ³n documental'
-        ].to_yaml
+      stub(db).select.stub!.from.stub!.where.stub!.all do
+        [ 
+          { possible_values: [
+              '010 GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros',
+              '011 GestiÃ³n de la informaciÃ³n | GestiÃ³n documental'
+            ].to_yaml }
+        ]
       end
 
       stub(db).select(:customized_id, :value).stub!.from.stub!.where do
@@ -36,7 +38,7 @@ scope do
   end
 
   test 'all_axis with block as parameter' do
-    @redmine.all_axis(2) do |axis|
+    @redmine.all_axis(2, 3, 4) do |axis|
       assert_equal({ axis_id: axis[:axis_id], desc: axis[:desc] }, axis)
     end
   end
