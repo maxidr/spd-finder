@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require File.expand_path("helper", File.dirname(__FILE__))
 
 scope do
@@ -38,5 +39,16 @@ scope do
     assert_equal [1, 2], stats.find_projects_ids_by_axis(10)
     assert_equal [2, 3], stats.find_projects_ids_by_axis(5)
     assert_equal [1, 2, 3], stats.find_projects_ids_by_axis(5, 10)
+  end
+
+  test 'add axis and retrieve all the axis types' do |stats|
+    axis_info = [ { id: 1, name: 'Funcional',
+                  values: [
+                    { id: 1, name: 'Software de gestión de datos | Gestión de base de datos' },
+                    { id: 2, name: 'Software de gestión de datos | Modelado de base de datos' } ]
+                } ]
+    stats.add_axis(axis_info)
+    list_of_axis = stats.axis_types
+    assert_equal axis_info, list_of_axis
   end
 end

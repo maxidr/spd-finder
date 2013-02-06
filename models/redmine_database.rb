@@ -60,15 +60,16 @@ class RedmineDatabase
   #
   # @return [Array<Hash>]
   #
-  def all_axis(*custom_field_ids, &block)
+  def all_axis(*custom_field_ids)
     all_axis = []
-    all_values = @db.select(:possible_values).from(:custom_fields).where("id IN ?", custom_field_ids).all
+    all_values = @db.select(:id, :name, :possible_values).from(:custom_fields).where("id IN ?", custom_field_ids).all
     all_values.each do |row|
+      axis_type = { id: row[:id], name: row[:name], values: [] }
       values = YAML.load(row[:possible_values])
       values.map do |desc|
-        axis = parse_axis_description(desc)
-        block ? block.call(axis) : all_axis << axis
+        axis_type[:values] << parse_axis_description(desc)
       end
+      all_axis << axis_type
     end
     all_axis
   end

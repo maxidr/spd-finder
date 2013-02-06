@@ -61,6 +61,40 @@ class Stats
     ids_from_bits(@redis.get(key))
   end
 
+  # Return all the axis types information
+  # See #add_axis to show the hash format of any axis
+  #
+  # @return [Array] 
+  def axis_types
+    axis_types = @redis.get 'axis_types'
+    JSON.parse(axis_types, symbolize_names: true)
+  end
+
+  # Expected an Array with a Hash as any element with the information 
+  # of all the axis.
+  #
+  # Example
+  #
+  #   [  
+  #     { id: 1, name: 'Funcional',                                                       # id and name of the axis type
+  #       values: [                                                                       # values of the axis for this type
+  #         { id: 1, name: 'Software de gestión de datos | Gestión de base de datos' },   
+  #         { id: 2, name: 'Software de gestión de datos | Modelado de base de datos' }
+  #       ]
+  #     },
+  #     { id: 2, name: 'Tecnico',                                                         # id and name of another axis type 
+  #       values: [
+  #         {......
+  #       ]
+  #     }
+  #   ]
+  #
+  # @param axis_info [Array of Hash]
+  #
+  def add_axis(axis_info)
+    @redis.set 'axis_types', axis_info.to_json
+  end
+
   private
 
   def project_key(id)

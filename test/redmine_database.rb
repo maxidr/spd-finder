@@ -12,12 +12,15 @@ scope do
           { id:2, name: 'test 2', identifier: 'test_2' },
         ]
       end
-      stub(db).select.stub!.from.stub!.where.stub!.all do
+      stub(db).select(:id, :name, :possible_values).stub!.from.stub!.where.stub!.all do
         [ 
-          { possible_values: [
+          { id: 1,
+            name: 'Funcional',
+            possible_values: [
               '010 GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros',
               '011 GestiÃ³n de la informaciÃ³n | GestiÃ³n documental'
-            ].to_yaml }
+            ].to_yaml 
+          }
         ]
       end
 
@@ -31,8 +34,11 @@ scope do
 
   test 'all_axis' do
     expect = [
-      { axis_id: 10, desc: 'GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros' },
-      { axis_id: 11, desc: 'GestiÃ³n de la informaciÃ³n | GestiÃ³n documental' }
+      { id: 1, name: 'Funcional', 
+        values: [
+          { axis_id: 10, desc: 'GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros' },
+          { axis_id: 11, desc: 'GestiÃ³n de la informaciÃ³n | GestiÃ³n documental' }
+        ]}
     ]
     assert_equal expect, @redmine.all_axis(2)
   end
