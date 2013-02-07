@@ -30,9 +30,9 @@ scope do
       end
     end
 
-    @loader = StatsLoader.new redmine_db: rdb
-    @stats = Stats.new
-    Redis.new.flushdb
+    @loader = StatsLoader.new(redmine_db: rdb, redis: redis_config)
+    @stats = Stats.new(redis_config)
+    Redis.new(redis_config).flushdb
   end
 
   test 'load_projects' do

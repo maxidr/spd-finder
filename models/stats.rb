@@ -49,15 +49,16 @@ class Stats
   end
 
   # @return [Array of ids] the ids of the projects finded
-  def find_projects_ids_by_axis(*axis_ids)
+  def find_projects_ids_by_axis(axis_ids)
     axis_keys = axis_ids.map { |axis_id| axis_key_of(axis_id) }
     bits = bit_operation_over_keys(axis_keys, 'OR')
     ids_from_bits(bits)
   end
 
   # @return [Array<Hash>] the list of projects in the axis (hash as list elements)
-  def find_projects_by_axis(*axis_ids)
-    projects_ids = find_projects_ids_by_axis(*axis_ids)
+  def find_projects_by_axis(axis_ids)
+    projects_ids = find_projects_ids_by_axis(axis_ids)
+    return [] if projects_ids.empty?
     projects_keys = projects_ids.map { |p_id| project_key_of(p_id) }
     @redis.mget(projects_keys).map { |json_info| json_info ? JSON.parse(json_info, symbolize_names: true) : nil }
   end
@@ -119,6 +120,7 @@ class Stats
   end
 
   def ids_from_bits(num)
+    return [] if num.nil?
     ids = []
     bits = num.unpack('B*').first # "00010100101"
     0.upto(bits.size) do |bit_pos|
