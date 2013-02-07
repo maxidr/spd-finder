@@ -27,7 +27,7 @@ class Stats
   # @param id [Fixnum or String] the id of the project
   # @param info [Hash] the values to persist
   def add_project(id, info)
-    @redis.set project_key(id), info.to_json
+    @redis.set project_key_of(id), info.to_json
   end
 
   # find project and return the text identifier
@@ -35,37 +35,39 @@ class Stats
   #
   # @return [Hash] with the project information
   def find_project(id)
-    info = @redis.get project_key(id)
+    info = @redis.get project_key_of(id)
     JSON.parse(info, symbolize_names: true) if info
   end
 
   # Asociate project (id) with an axis (id)
   def add_project_to_axis(project_id, axis_id)
-    @redis.setbit(axis_key(axis_id), project_id, 1)
+    @redis.setbit(axis_key_of(axis_id), project_id, 1)
   end
 
   def is_project_in_axis?(project_id, axis_id)
-    @redis.getbit(axis_key(axis_id), project_id) == 1
+    @redis.getbit(axis_key_of(axis_id), project_id) == 1
   end
 
   # @return [Array of ids] the ids of the projects finded
-  def find_projects_ids_by_axis(*axis)
-    key = "find"
-    axis_ids = []
-    axis.each do |axis_id|
-      key << ":" << axis_id
-      axis_ids << axis_key(axis_id)
-    end
-    # TODO: Cache the key and results
-    @redis.bitop('OR', key, axis_ids)
-    ids_from_bits(@redis.get(key))
+  def find_projects_ids_by_axis(*axis_ids)
+    axis_keys = axis_ids.map { |axis_id| axis_key_of(axis_id) }
+    bits = bit_operation_over_keys(axis_keys, 'OR')
+    ids_from_bits(bits)
   end
+
+  # @return [Array<Hash>] the list of projects in the axis (hash as list elements)
+  def find_projects_by_axis(*axis_ids)
+    projects_ids = find_projects_ids_by_axis(*axis_ids)
+    projects_keys = projects_ids.map { |p_id| project_key_of(p_id) }
+    @redis.mget(projects_keys).map { |json_info| json_info ? JSON.parse(json_info, symbolize_names: true) : nil }
+  end
+
 
   # Return all the axis types information
   # See #add_axis to show the hash format of any axis
   #
   # @return [Array] 
-  def axis_types
+  def all_axis_types
     axis_types = @redis.get 'axis_types'
     JSON.parse(axis_types, symbolize_names: true)
   end
@@ -91,17 +93,28 @@ class Stats
   #
   # @param axis_info [Array of Hash]
   #
-  def add_axis(axis_info)
+  def add_axis_types(axis_info)
     @redis.set 'axis_types', axis_info.to_json
   end
 
   private
 
-  def project_key(id)
+  def bit_operation_over_keys(keys_over_op, operator)
+    # TODO: Cache the key and results
+    key = 'search:result'
+    bits = nil
+    @redis.multi do
+      @redis.bitop(operator, key, keys_over_op)
+      bits = @redis.get(key)  # returns Future as a bits see (https://github.com/redis/redis-rb#futures)
+    end
+    bits.value
+  end
+
+  def project_key_of(id)
     "projects:#{id}"
   end
 
-  def axis_key(id)
+  def axis_key_of(id)
     "axis:#{id}"
   end
 

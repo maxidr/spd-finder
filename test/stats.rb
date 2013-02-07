@@ -41,14 +41,21 @@ scope do
     assert_equal [1, 2, 3], stats.find_projects_ids_by_axis(5, 10)
   end
 
+  test 'find projects by axis' do |stats|
+    project_info = { name: 'project 1', identifier: 'p1' }
+    stats.add_project(1, project_info)
+    stats.add_project_to_axis(1, 10)
+    assert_equal [ project_info ], stats.find_projects_by_axis(10)
+  end
+
   test 'add axis and retrieve all the axis types' do |stats|
     axis_info = [ { id: 1, name: 'Funcional',
                   values: [
                     { id: 1, name: 'Software de gestión de datos | Gestión de base de datos' },
                     { id: 2, name: 'Software de gestión de datos | Modelado de base de datos' } ]
                 } ]
-    stats.add_axis(axis_info)
-    list_of_axis = stats.axis_types
+    stats.add_axis_types(axis_info)
+    list_of_axis = stats.all_axis_types
     assert_equal axis_info, list_of_axis
   end
 end
