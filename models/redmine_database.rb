@@ -14,7 +14,7 @@ class RedmineDatabase
   # Return an array with any element represent one project
   # Project content example:
   #     
-  #     { id: 1, data: { name: 'project 1', identifier: 'proj_1' } }
+  #     { id: 1, data: { name: 'project 1', identifier: 'proj_1', description: 'the description' } }
   #
   # Can use a block parameter that will be invoked on any row iteration.
   # The block must expected a row as parameter and the row contains:
@@ -28,6 +28,7 @@ class RedmineDatabase
   #       puts row[:id]
   #       puts row[:name]
   #       puts row[:identifier]
+  #       puts row[:description]
   #     end
   #
   #
@@ -38,7 +39,7 @@ class RedmineDatabase
       if block
         block.call(row)
       else
-        { id: row[:id], data: { name: row[:name], identifier: row[:identifier] } }
+        { id: row[:id], data: { name: row[:name], identifier: row[:identifier], description: row[:description] } }
       end
     end
   end

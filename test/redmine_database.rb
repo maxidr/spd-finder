@@ -3,15 +3,28 @@ require File.expand_path("helper", File.dirname(__FILE__))
 require 'sequel/adapters/mock'
 require 'yaml'
 
+def projects_db_format
+    [ 
+      { id: 1, name: 'test 1', identifier: 'test_1', description: 'the description 1'  },
+      { id: 2, name: 'test 2', identifier: 'test_2', description: 'the description 2'  },
+    ]
+end
+
+def projects_method_format
+  projects_db_format.map { |row| convert_row_to_expected_hash(row) }
+end
+
+def convert_row_to_expected_hash(row)
+    { id: row[:id], 
+      data: { name: row[:name], identifier: row[:identifier], description: row[:description] } 
+    }
+end
+
 scope do
   prepare do
     any_instance_of(Sequel::Mock::Database) do |db|
-      stub(db).from(:projects) do
-        [ 
-          { id:1, name: 'test 1', identifier: 'test_1'  },
-          { id:2, name: 'test 2', identifier: 'test_2' },
-        ]
-      end
+      stub(db).from(:projects) { projects_db_format } 
+
       stub(db).select(:id, :name, :possible_values).stub!.from.stub!.where.stub!.all do
         [ 
           { id: 1,
@@ -50,17 +63,14 @@ scope do
   end
 
   test 'all_project' do
-    expect = [ 
-      { id: 1, data: { name: 'test 1', identifier: 'test_1' } },
-      { id: 2, data: { name: 'test 2', identifier: 'test_2' } }
-    ]
-
-    assert_equal expect, @redmine.all_projects
+    assert_equal projects_method_format, @redmine.all_projects
   end
 
   test 'all_proyect with block as parameter' do
+    expected = {}
     @redmine.all_projects do |row|
-      assert_equal({ id: row[:id], name: row[:name], identifier: row[:identifier] }, row)
+      expected = { id: row[:id], name: row[:name], identifier: row[:identifier], description: row[:description] }
+      assert_equal expected, row
     end
   end
 
