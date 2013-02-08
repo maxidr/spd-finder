@@ -1,8 +1,51 @@
+#encoding: UTF-8
+
+require 'rubygems'
+require 'mysql2'
+
 task :default => :test
 
 task :test do
-    require "cutest"
+  require "cutest"
+  Cutest.run(Dir["test/*.rb"])
+end
 
-      Cutest.run(Dir["test/*.rb"])
+desc "Importar..."
+task :import do 
+  custom_field_ids = ENV["CUSTOM_FIELD_IDS"]
+  if custom_field_ids.nil?
+    msg = <<-MSG
+
+      Debe especificar el parámetro CUSTOM_FIELD_IDS con el valor de los IDS separados por comas.
+      Los ids corresponden a la tabla custom_fields del redmine que representan los campos personalizados del sistema.
+      
+      Ejemplo:
+
+        rake import CUSTOM_FIELD_IDS=1,2,3,4
+
+
+
+      El resto de los parámetros son tomados de las variables de entorno:
+
+      + REDIS_URL: URL de la base de datos redis (ej: redis://127.0.0.1:6379/0)
+      + REDMINE_DATABASE_URL: URL de la base de datos de redmine (ej.: mysql2://user:password@server_host:/database)
+
+
+      MSG
+    abort(msg)
+  end
+  
+  require File.expand_path("settings", File.dirname(__FILE__))
+  require 'redis'
+  require 'sequel'
+  Dir["./models/**/*.rb"].each  { |rb| require rb }
+  
+  loader = StatsLoader.new(redis: { url: Settings::REDIS_URL }, db: Settings::REDMINE_DATABASE_URL )
+  loader.flush_redis
+  loader.load_projects
+  ids = custom_field_ids.split(", ")
+  loader.load_axis(*ids)
+  loader.load_project_axis_relations(*ids)
+  puts "Proceso de importación finalizado correctamente!\n"
 end
 

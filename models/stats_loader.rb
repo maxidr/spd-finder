@@ -19,6 +19,10 @@ class StatsLoader
     @stats = attrs[:stats] || Stats.new(attrs[:redis] || {})
   end
 
+  def flush_redis
+    @stats.flush_database
+  end
+
   def load_projects
     @rdb.all_projects do |row|
       @stats.add_project(row[:id], slice(row, :name, :identifier)) 
@@ -27,7 +31,8 @@ class StatsLoader
 
   def load_axis(*custom_fields_ids)
     all_axis = @rdb.all_axis(custom_fields_ids)
-    @stats.add_axis all_axis
+    puts "all_axis: #{all_axis}"
+    @stats.add_axis_types all_axis
   end
 
   def load_project_axis_relations (*custom_fields_ids)

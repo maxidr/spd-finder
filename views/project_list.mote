@@ -1,0 +1,13 @@
+<h3>Proyectos ({{ projects.size }})</h3>
+% if projects.empty?
+  <p>No hay proyectos para los filtros seleccioandos</p>
+% else
+  <ul id="project-list">
+    % projects.each do |p|
+      <li>
+        <a href="{{ p[:link] }}">{{ p[:name] }}</a>
+        <p>{{ p[:description] }}</p>
+      </li>
+    % end
+  </ul>
+% end

@@ -23,6 +23,10 @@ class Stats
     @redis = Redis.new(attrs)
   end
 
+  def flush_database
+    @redis.flushdb
+  end
+
   # Add a new project to the stats
   # @param id [Fixnum or String] the id of the project
   # @param info [Hash] the values to persist

@@ -1,0 +1,116 @@
+body {
+  font-family: "Lucida Grande", verdana, arial, helvetica, sans-serif;
+  font-size: 12px;
+}
+
+.box {
+  background-color: #fcfcfc;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  padding: 16px;
+
+  margin-bottom: 10px;
+  color: #505050;
+  line-height: 1.5em;
+  border: 1px solid #e4e4e4;
+
+  display: block;
+}
+
+#content {
+  margin-right: 0px;
+  background: #fff;
+  border: 1px solid silver;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 8px;
+  padding: 6px 10px 10px 10px;
+}
+
+#content > h2 {
+  border-top: 1px solid white;
+  border-bottom: 1px solid #AECCD7;
+  background: #EAF2F5 url(../images/smooth-gradient-blue.jpg);
+  text-shadow: 0px 1px white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+  -moz-border-radius-topright: 8px;
+  padding: 12px 20px;
+  margin: -6px -10px 10px;
+  letter-spacing: -1px;
+  color: #444;
+}
+
+form {
+  display: inline;
+  margin-top: 0em;
+}
+
+.box {
+  padding: 6px;
+  margin-bottom: 10px;
+  background-color: #f6f6f6;
+  color: #505050;
+  line-height: 1.5em;
+  border: 1px solid #e4e4e4;
+  background-color: #fcfcfc;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  padding: 16px;
+}
+
+.tabular p {
+  margin: 0;
+  padding: 3px 0 3px 0;
+  padding-left: 180px;
+  min-height: 1.8em;
+  clear: left;
+}
+
+.tabular label {
+  font-weight: bold;
+  float: left;
+  text-align: right;
+  margin-left: -180px;
+  width: 175px;
+}
+
+p {
+  display: block;
+  -webkit-margin-before: 1em;
+  -webkit-margin-after: 1em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+}
+
+ul#project-list {
+  margin: 0;
+  padding: 0;
+}
+ul#project-list li {
+  list-style-image:none;
+  list-style-type:none;
+  padding:0pt;
+  list-style-position:outside;
+  padding: 10px;
+}
+
+ul#project-list li:hover {
+  background-color: #E0F2F7;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+}
+
+.chzn-container-multi .chzn-choices .search-field input{
+  height: 26px;
+  line-height: 26px;
+}

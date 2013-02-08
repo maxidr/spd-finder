@@ -6,9 +6,6 @@ class RedmineDatabase
 
   def initialize(connection_info = nil)
     @db = Sequel.connect(connection_info)
-   # Sequel.postgres('database_name', :user=>'user', 
-   #                       :password=>'password', :host=>'host', :port=>5432, 
-   #                              :max_connections=>10)
   end
 
   # Return an array with any element represent one project
@@ -92,8 +89,9 @@ class RedmineDatabase
     @db.select(:customized_id, :value)
       .from(:custom_values)
       .where("customized_type = 'Project' and custom_field_id IN ? and value != ''", custom_fields_ids)
-      .map do |val|
+      .map do |val|       
         row = { project_id: val[:customized_id], axis_id: parse_axis_description(val[:value]).fetch(:axis_id) }
+        puts "row: #{row} | original value: #{val[:value]}"
         row_processor ? row_processor.call(row) : row
       end
   end
