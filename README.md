@@ -2,9 +2,28 @@ Finder SPD
 ==========
 
 El objetivo del proyecto es contar con un buscador de proyectos SPD donde se pueda filtrar por ejes.
-La información es obtenida de una base de datos que utiliza un sistema [Redmine](http://redmine.org). El sistema cuenta con campos personalizados en los proyectos llamados ejes (ej: "Funcionalidad": donde se indican valores que identifica dicha característica del sistema).  Dichos campos son de selección múltiple, por lo que un proyecto puede tener varios valores de varios ejes. 
+La información es obtenida de una base de datos que utiliza un sistema [Redmine](http://redmine.org). 
+
+El sistema cuenta con campos personalizados en los proyectos llamados ejes (ej: "Funcionalidad": donde se indican valores que identifica dicha característica del sistema).  Dichos campos son de selección múltiple, por lo que un proyecto puede tener varios valores de varios ejes. 
 
 El proyecto depende de una base de datos [Redis](redis.io)
+
+**IMPORTANTE**
+
+Es necesario que los ejes, en Redmine, sean cargados con valores que correspondan al siguiente formato:
+
+    NNNNN DESCRIPCION
+
+Donde:
+
++ NNNNN es un número (puede iniciar con 0).  Ej.: 00001 ó 12 ó 00391
++ DESCRIPCION es la descripción del eje. Ej.: _Lenguaje de programación | Visual FoxPro_ ó _Software de seguridad | Biométrico_
+
+Ejemplos:
+
++ 007 Gestión de la información | Portal
++ 1001 Lenguaje de programación | Ada
+  
 
 ## Configuración
 
