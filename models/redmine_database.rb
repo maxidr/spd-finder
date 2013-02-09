@@ -6,6 +6,7 @@ class RedmineDatabase
 
   def initialize(connection_info = nil)
     @db = Sequel.connect(connection_info)
+    YAML::ENGINE.yamler= 'syck'
   end
 
   # Return an array with any element represent one project
