@@ -57,7 +57,7 @@ scope do
   end
 
   test 'all_axis with block as parameter' do
-    @redmine.all_axis(2, 3, 4) do |axis|
+    @redmine.all_axis([2, 3, 4]) do |axis|
       assert_equal({ axis_id: axis[:axis_id], desc: axis[:desc] }, axis)
     end
   end
@@ -76,11 +76,11 @@ scope do
 
   test 'projects_axis_relations' do
     expect = [ { project_id: 1, axis_id: 10 } ]
-    assert_equal expect, @redmine.projects_axis_relations(2,3)
+    assert_equal expect, @redmine.projects_axis_relations([2,3])
   end
 
   test 'projects_axis_relations with block as parameter' do
-    @redmine.projects_axis_relations(2, 3) do |row|
+    @redmine.projects_axis_relations([2, 3]) do |row|
       assert_equal({ project_id: row[:project_id], axis_id: row[:axis_id] }, row)
     end
   end

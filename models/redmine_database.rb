@@ -58,10 +58,10 @@ class RedmineDatabase
   #
   # @return [Array<Hash>]
   #
-  def all_axis(*custom_field_ids)
+  def all_axis(custom_field_ids)
     all_axis = []
     all_values = @db.select(:id, :name, :possible_values).from(:custom_fields).where("id IN ?", custom_field_ids).all
-
+    
     all_values.each do |row|
       axis_type = { id: row[:id], name: row[:name], values: [] }
       values = YAML.load(row[:possible_values])
@@ -86,7 +86,7 @@ class RedmineDatabase
   #
   # @return [Array<Hash>] where any element is a hash with projects_id and axis_id (example: { project_id: 1, axis_id: 10 })
   #
-  def projects_axis_relations(*custom_fields_ids, &row_processor)
+  def projects_axis_relations(custom_fields_ids, &row_processor)
     @db.select(:customized_id, :value)
       .from(:custom_values)
       .where("customized_type = 'Project' and custom_field_id IN ? and value != ''", custom_fields_ids)

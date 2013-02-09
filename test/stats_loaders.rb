@@ -43,7 +43,7 @@ scope do
   end
 
   test 'load_project_axis_relations' do
-    @loader.load_project_axis_relations(2,3,4)
+    @loader.load_project_axis_relations([2,3,4])
     project_in_axis.each do |row|
       assert @stats.is_project_in_axis?(row[:project_id], row[:axis_id])
     end

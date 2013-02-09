@@ -29,12 +29,12 @@ class StatsLoader
     end
   end
 
-  def load_axis(*custom_fields_ids)
+  def load_axis(custom_fields_ids)
     all_axis = @rdb.all_axis(custom_fields_ids)
     @stats.add_axis_types all_axis
   end
 
-  def load_project_axis_relations (*custom_fields_ids)
+  def load_project_axis_relations (custom_fields_ids)
     @rdb.projects_axis_relations(custom_fields_ids) do |row|
       @stats.add_project_to_axis(row[:project_id], row[:axis_id])
     end

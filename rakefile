@@ -43,9 +43,10 @@ task :import do
   loader = StatsLoader.new(redis: { url: Settings::REDIS_URL }, db: Settings::REDMINE_DATABASE_URL )
   loader.flush_redis
   loader.load_projects
-  ids = custom_field_ids.split(", ")
-  loader.load_axis(*ids)
-  loader.load_project_axis_relations(*ids)
+  ids = custom_field_ids.split(",")
+  puts "ids: #{ids}"
+  loader.load_axis(ids)
+  loader.load_project_axis_relations(ids)
   puts "Proceso de importación finalizado correctamente!\n"
 end
 
