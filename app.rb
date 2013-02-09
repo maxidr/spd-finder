@@ -18,6 +18,9 @@ Cuba.use Rack::Static,
 Cuba.plugin Cuba::Mote
 
 Dir["./models/**/*.rb"].each  { |rb| require rb }
+Dir["./lib/**/*.rb"].each { |rb| require rb }
+
+Cuba.plugin ViewHelper
 
 def stats
   @stats ||= Stats.new(url: Settings::REDIS_URL)

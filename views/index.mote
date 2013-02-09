@@ -2,14 +2,14 @@
   <h2>Buscador de proyectos</h2>
 
   <div class="box tabular">
-    <form action="/" method="GET">
+    <form action="{{ this.url('/')  }}" method="GET">
       % axis_types.each do |axis_type|
         <p>
           <label>{{ axis_type[:name] }}</label>
           <select data-placeholder="Seleccione para filtrar por esta opción" multiple class="chzn-select" style="width:600px;" name="q[]">
             % axis_type[:values].each do |axis|
-              <option value="{{ axis[:axis_id] }}" {{ q.include?(axis[:axis_id].to_s) ? 'selected' : ''  }}>
-                {{ axis[:desc] }}
+              <option value="{{ axis[:id] }}" {{ q.include?(axis[:id].to_s) ? 'selected' : ''  }}>
+                {{ axis[:name] }}
               </option>
             % end
           </select>
