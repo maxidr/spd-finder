@@ -61,6 +61,7 @@ class RedmineDatabase
   def all_axis(*custom_field_ids)
     all_axis = []
     all_values = @db.select(:id, :name, :possible_values).from(:custom_fields).where("id IN ?", custom_field_ids).all
+
     all_values.each do |row|
       axis_type = { id: row[:id], name: row[:name], values: [] }
       values = YAML.load(row[:possible_values])
@@ -89,9 +90,12 @@ class RedmineDatabase
     @db.select(:customized_id, :value)
       .from(:custom_values)
       .where("customized_type = 'Project' and custom_field_id IN ? and value != ''", custom_fields_ids)
-      .map do |val|       
-        row = { project_id: val[:customized_id], axis_id: parse_axis_description(val[:value]).fetch(:id) }
-        row_processor ? row_processor.call(row) : row
+      .map do |val|
+        axis_info = parse_axis_description(val[:value])
+        unless axis_info.nil?
+          row = { project_id: val[:customized_id], axis_id: axis_info.fetch(:id) }
+          row_processor ? row_processor.call(row) : row
+        end
       end
   end
 
@@ -99,9 +103,11 @@ class RedmineDatabase
 
   # Parse the string "010 GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros"
   # into { id: 10, desc: "GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros" }
-  # @return [Hash] with id and name as keys
+  #
+  # @return [Hash or nil] a hash with id and name as keys OR nil if the expected format is not "number space string"
   def parse_axis_description(axis_desc)
-    matching = axis_desc.match(/(\d+\s)([\w*\W*\s*]*)/) 
+    matching = axis_desc.match(/(\d+\s)([\w*\W*\s*]*)/)
+    return nil if matching.nil?
     { id: matching[1].to_i, name: matching[2] }
   end
   
