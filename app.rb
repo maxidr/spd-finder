@@ -7,6 +7,7 @@ require "cuba/contrib"
 #require "cuba/render"
 require "mote"
 require "redis"
+require "rake"
 
 Cuba.use Rack::MethodOverride
 Cuba.use Rack::Session::Cookie, :secret => SecureRandom.hex(64)
@@ -39,20 +40,23 @@ end
 Cuba.define do
   on get do
         
-    #on param('q') do |q|
-    #  projects = stats.find_projects_by_axis(q)
-    #  res.write view('project_list', projects: projects.map { |p| convert_project_to_view_model(p) }) 
-    #end
-    
     on root do
       q = req.params['q'] || []
       projects = []
       unless q.empty?
         projects = projects_to_view_model stats.find_projects_by_axis(q)
       end
-      puts "q: #{q}, class. #{q.class}"
-      #res.write view('index', axis_types: stats.all_axis_types, q: q, projects: projects)
       render('index', axis_types: stats.all_axis_types, q: q, projects: projects)
+    end
+    
+    on 'reload', param('ids') do |ids|
+      ENV["CUSTOM_FIELD_IDS"] = ids
+      rake = Rake::Application.new
+      Rake.application = rake
+      rake.init
+      rake.load_rakefile
+      rake[:import].invoke
+      res.write "reloaded using ids: #{ids}"
     end
 
   end
