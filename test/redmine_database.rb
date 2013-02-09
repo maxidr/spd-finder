@@ -49,8 +49,8 @@ scope do
     expect = [
       { id: 1, name: 'Funcional', 
         values: [
-          { axis_id: 10, desc: 'GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros' },
-          { axis_id: 11, desc: 'GestiÃ³n de la informaciÃ³n | GestiÃ³n documental' }
+          { id: 10, name: 'GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros' },
+          { id: 11, name: 'GestiÃ³n de la informaciÃ³n | GestiÃ³n documental' }
         ]}
     ]
     assert_equal expect, @redmine.all_axis(2)

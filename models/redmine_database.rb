@@ -90,8 +90,7 @@ class RedmineDatabase
       .from(:custom_values)
       .where("customized_type = 'Project' and custom_field_id IN ? and value != ''", custom_fields_ids)
       .map do |val|       
-        row = { project_id: val[:customized_id], axis_id: parse_axis_description(val[:value]).fetch(:axis_id) }
-        puts "row: #{row} | original value: #{val[:value]}"
+        row = { project_id: val[:customized_id], axis_id: parse_axis_description(val[:value]).fetch(:id) }
         row_processor ? row_processor.call(row) : row
       end
   end
@@ -100,10 +99,10 @@ class RedmineDatabase
 
   # Parse the string "010 GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros"
   # into { id: 10, desc: "GestiÃ³n de la informaciÃ³n | AdministraciÃ³n de registros" }
-  # @return [Hash] with id and desc as keys
+  # @return [Hash] with id and name as keys
   def parse_axis_description(axis_desc)
     matching = axis_desc.match(/(\d+\s)([\w*\W*\s*]*)/) 
-    { axis_id: matching[1].to_i, desc: matching[2] }
+    { id: matching[1].to_i, name: matching[2] }
   end
   
 end

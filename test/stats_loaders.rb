@@ -4,8 +4,8 @@ require 'sequel/adapters/mock'
 
 def projects
   [
-    { id: 1, name: 'project number 1', identifier: 'pj_1' },
-    { id: 20, name: 'project number 20 new', identifier: 'nov_20' }
+    { id: 1, name: 'project number 1', identifier: 'pj_1', description: 'the descriptio of the project 1' },
+    { id: 20, name: 'project number 20 new', identifier: 'nov_20', description: 'the descriptio of the project 20' }
   ]
 end
 
@@ -38,7 +38,7 @@ scope do
   test 'load_projects' do
     @loader.load_projects
     projects.each do |p|      
-      assert_equal({ name: p[:name], identifier: p[:identifier] },  @stats.find_project(p[:id]))
+      assert_equal({ name: p[:name], identifier: p[:identifier], description: p[:description] },  @stats.find_project(p[:id]))
     end
   end
 

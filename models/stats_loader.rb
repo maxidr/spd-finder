@@ -25,13 +25,12 @@ class StatsLoader
 
   def load_projects
     @rdb.all_projects do |row|
-      @stats.add_project(row[:id], slice(row, :name, :identifier)) 
+      @stats.add_project(row[:id], slice(row, :name, :identifier, :description)) 
     end
   end
 
   def load_axis(*custom_fields_ids)
     all_axis = @rdb.all_axis(custom_fields_ids)
-    puts "all_axis: #{all_axis}"
     @stats.add_axis_types all_axis
   end
 
